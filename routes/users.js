@@ -4,6 +4,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const { encrypt, decrypt } = require('./crypto'); // Đường dẫn tương đối từ users.js tới crypto.js
 const checkUserLoggedIn = require('./authMiddleware');
+const { v4: uuidv4 } = require('uuid');
 
 var fs = require('fs');
 var path = require('path');
@@ -187,6 +188,7 @@ router.get('/register', function (req, res) {
 });
 
 router.post('/register', async (req, res) => {
+  
   try {
     const {
       firstname,
@@ -207,10 +209,11 @@ router.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(400).send('Người dùng đã tồn tại');
     }
-
+    const userId = uuidv4();
     // Mã hóa mật khẩu và lưu người dùng mới
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     await usersCollection.insertOne({
+      id: userId,
       firstname,
       lastname,
       dateofbirth,
