@@ -5,6 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
+const checkUserLoggedIn = require('../authMiddleware');
 
 // Import model
 const connectDb = require('../../models/db');
@@ -170,8 +171,8 @@ router.post('/login', async (req, res) => {
       // Lưu JWT vào cookie
       res.cookie('auth_token', token, {
         httpOnly: true,
-        // secure: true, 
-        sameSite: 'strict',
+        secure: true, 
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000 // 1 tuần
       });
       
@@ -196,6 +197,16 @@ router.post('/login', async (req, res) => {
     console.error('Đã có lỗi xảy ra', error);
     res.status(500).send('Lỗi server');
   }
+});
+
+router.get('/check-login-status', checkUserLoggedIn, (req, res) => {
+  // Nếu middleware không redirect hoặc gửi lỗi, có nghĩa là người dùng đã đăng nhập thành công
+  res.json({
+    isLoggedIn: true,
+    user: req.user, 
+  });
+  console.log(json);
+  
 });
 
 

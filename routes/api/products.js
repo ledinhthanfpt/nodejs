@@ -191,13 +191,13 @@ router.get('/categoryid/:id', async (req, res, next) => {
 
 // GET danh sách sản phẩm theo tên danh mục
 router.get('/search/:name', async (req, res, next) => {
-    const categoryName = req.params.name;
+    const name = req.params.name;
     const db = await connectDb();
     const productsCollection = db.collection('products');
 
     try {
         // Tiếp theo, tìm tất cả sản phẩm thuộc danh mục đó
-        const products = await productsCollection.find({ name: categoryName }).toArray();
+        const products = await productsCollection.find({ name: name }).toArray();
         if (products.length > 0) {
             res.status(200).json(products);
         } else {
@@ -208,6 +208,28 @@ router.get('/search/:name', async (req, res, next) => {
         res.status(500).send('Server error');
     }
 });
+
+// GET danh sách sản phẩm theo tên
+router.get('/search-red/:name', async (req, res) => {
+    const name = req.params.name;
+    const db = await connectDb();
+    const productsCollection = db.collection('products');
+
+    try {
+        // Sử dụng biểu thức chính quy để tìm kiếm linh hoạt
+        const products = await productsCollection.find({ name: new RegExp(name, 'i') }).toArray(); // 'i' cho phép tìm kiếm không phân biệt hoa thường
+
+        if (products.length > 0) {
+            res.status(200).json(products);
+        } else {
+            res.status(404).json({ message: 'No products found with that name' });
+        }
+    } catch (error) {
+        console.error('Error fetching products by name:', error);
+        res.status(500).send('Server error');
+    }
+});
+
 
 router.get('/sort/asc/limit/:limit', async (req, res, next) => {
     const limit = parseInt(req.params.limit); // Lấy giới hạn từ URL và chuyển đổi sang số
