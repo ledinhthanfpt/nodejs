@@ -7,8 +7,15 @@ const { validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 const checkUserLoggedIn = require('../authMiddleware');
 
+const jwt = require('jsonwebtoken');
+
+const cookieParser = require('cookie-parser');
+
+router.use(cookieParser());
+
 // Import model
 const connectDb = require('../../models/db');
+const { log } = require('console');
 
 const saltRounds = 10;
 
@@ -56,6 +63,42 @@ async function sendVerificationEmail(email, verificationToken) {
         return false;
     }
 }
+
+
+router.get('/check-login-status', (req, res) => {
+  // Lấy token từ cookie
+  const token = req.cookies.auth_token;
+
+
+  // Kiểm tra token
+  if (!token) {
+    return res.status(200).json({
+      isLoggedIn: false,
+      message: "Bạn chưa đăng nhập!"
+    });
+  }
+
+  try {
+    // Xác minh token
+    const verified = jwt.verify(token, process.env.KEY_CRYPTO);
+    // Nếu token hợp lệ, trả về thông tin người dùng
+    return res.status(200).json({
+      isLoggedIn: true,
+      message: "Bạn đã đăng nhập!",
+      user: {
+        id: verified.userId,
+        role: verified.role,
+        username: verified.username
+      }
+    });
+  } catch (error) {
+    // Nếu xác minh token thất bại
+    return res.status(200).json({
+      isLoggedIn: false,
+      message: "Phiên làm việc không hợp lệ hoặc đã hết hạn!"
+    });
+  }
+});
 
 
 // Trả về danh sách người dùng
@@ -199,15 +242,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/check-login-status', checkUserLoggedIn, (req, res) => {
-  // Nếu middleware không redirect hoặc gửi lỗi, có nghĩa là người dùng đã đăng nhập thành công
-  res.json({
-    isLoggedIn: true,
-    user: req.user, 
-  });
-  console.log(json);
-  
-});
+
 
 
 module.exports = router;
