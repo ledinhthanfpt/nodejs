@@ -11,7 +11,7 @@ var path = require('path');
 var {
   validationResult
 } = require('express-validator');
-require('dotenv').config();
+
 
 
 var express = require('express');

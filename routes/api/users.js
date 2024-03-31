@@ -148,6 +148,55 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
-// Các route khác ...
+router.post('/login', async (req, res) => {
+  const { login, password } = req.body; // `login` có thể là username hoặc email
+  try {
+    const db = await connectDb();
+    const usersCollection = db.collection('users');
+    // Sử dụng $or để tìm người dùng bằng username hoặc email
+    const user = await usersCollection.findOne({ 
+      $or: [{ username: login }, { email: login }] 
+    });
+
+    if (user && await bcrypt.compare(password, user.password)) {
+      // Tạo JWT cho người dùng
+      const jwt = require('jsonwebtoken');
+      const token = jwt.sign({
+        userId: user._id,
+        role: user.role,
+        username: user.username 
+      }, process.env.KEY_CRYPTO, { expiresIn: '7d' });
+
+      // Lưu JWT vào cookie
+      res.cookie('auth_token', token, {
+        httpOnly: true,
+        // secure: true, 
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 1 tuần
+      });
+      
+      
+      
+      console.log(token);
+      
+      // Kiểm tra trạng thái xác minh và vai trò của người dùng để chuyển hướng
+      if (user.key === 'off') {
+        res.status(401).send('Vui lòng sác minh tài khoản bằng đường dẫn trong gmail');
+      } else if (user.key === 'xx') {
+        res.status(401).send('Tài khoản quản trị bị khóa liên hệ mail:"quanlyhosothucung@gmail.com" để biết thêm ');
+      } else if (user.role === 'admin') {
+        return res.redirect('/products');
+      } else if (user.role === 'user') {
+        return res.redirect('http://127.0.0.1:5500/index.html');
+      }
+    } else {
+      res.status(401).send('Tên đăng nhập hoặc mật khẩu không đúng');
+    }
+  } catch (error) {
+    console.error('Đã có lỗi xảy ra', error);
+    res.status(500).send('Lỗi server');
+  }
+});
+
 
 module.exports = router;
