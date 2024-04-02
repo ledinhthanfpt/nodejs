@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sản phẩm</title>
+    <title>addPro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- icon boostrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -19,7 +20,7 @@
             <p><i class="bi bi-pie-chart-fill me-2"></i><a class="text-decoration-none text-white" href="/statistic"> Quản lý thống kê</a></p>
             <p><i class="bi bi-tag-fill me-2"></i><a class="text-decoration-none text-white" href="http://localhost:3000/categories"> Quản lý danh mục</a></p>
             <p><i class="bi bi-box-seam me-2"></i><a class="text-decoration-none text-white" href="http://localhost:3000/products"> Quản lý sản phẩm</a></p>
-            <p><i class="bi bi-people-fill me-2"></i><a class="text-decoration-none text-white" href="http://localhost:3000/users"> Quản lý người dùng</a></p>
+            <p><i class="bi bi-people-fill me-2"></i><a class="text-decoration-none text-white" href="/user"> Quản lý người dùng</a></p>
             <p><i class="bi bi-cart-fill me-2"></i><a class="text-decoration-none text-white" href="/order"> Quản lý đơn hàng</a></p>
             <p><i class="bi bi-chat-left-text-fill me-2"></i><a class="text-decoration-none text-white" href="/feedback"> Quản lý bình luận</a></p>
             <hr>
@@ -30,50 +31,38 @@
         <div class="col-md-10 p-0">
             <div class="shadow bg-danger text-white d-flex justify-content-between align-content-center  p-3 pb-1">
                 <p>TRANG QUẢN TRỊ WEBSITE HPLSHOP</p>
-                <div><span><%= userName %></span><img class="rounded m-1 border border-1 border-white" width="30px" height="30px" src="https://lh3.googleusercontent.com/a/AAcHTtdsW-6i09Wa-XNKWjkAjv7vrId4EIbE5Ggj3W_rA6_-18Q=s576-c-no" alt=""></div>
+                <div><span>Admin</span><img class="rounded m-1 border border-1 border-white" width="30px" height="30px" src="https://lh3.googleusercontent.com/a/AAcHTtdsW-6i09Wa-XNKWjkAjv7vrId4EIbE5Ggj3W_rA6_-18Q=s576-c-no" alt=""></div>
             </div>
-            <div class="row p-5">
-                    <h4>Quản lý sản phẩm</h4>
-                    
-                    <div>
-                        <a href="http://localhost:3000/products/add"><button class="btn btn-primary">Thêm sản phẩm</button></a>
-                    </div>
-            </div>
-            <table class="table">
-                <thead>
-                    <th>ID</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Hình ảnh</th>
-                    <th>Giá</th>
-                    <th>Mô tả</th>
-                    <th>Danh mục</th>
-                    <th>Thao tác</th>
-                </thead>
-                <tbody>
-                    <% for(let p of products){%>
-                    <tr>
-                        <td><%=p.id%></td>
-                        <td><%=p.name%></td>
-                        <td><img src="../images/<%=p.img%>" width="100px"></td>
-                        <td><%=p.price%></td>
-                        <td><%=p.description%></td>
-                        <td><%=p.categoryId%></td>
-                        <td>
-                            <a href="/products/edit/<%=p.id%>"><i class="fs-5 text-danger bi bi-pencil-square"></i></a>
-                            <a href="/products/delete/<%=p.id%>"><i class="fs-5 text-warning bi bi-trash3-fill"></i></a>
-                        </td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
+            
+            
+                <form action="/vouchers/add" method="POST" >
+                    <label for="name">Tên Voucher:</label>
+                    <input type="text" id="name" name="name" required><br>
+                
+                    <label for="type">Loại:</label>
+                    <input type="text" id="type" name="type" required><br>
+                
+                    <label for="value">Giá trị:</label>
+                    <input type="text" id="value" name="value" required><br>
+                
+                    <label for="condition">Điều kiện:</label>
+                    <input type="text" id="condition" name="condition" required><br>
+                
+                    <label for="date">Ngày:</label>
+                    <input type="date" id="date" name="date" required><br>
+                
+                    <button type="submit">Thêm Voucher</button>
+                </form>
+                
+            
+            
         </div>
 
     </div>
     <!-- Footer -->
     <div class="bg-danger text-white text-center p-2">
-        
+        <p>@2024 by Lê Phát Hiện</p>
     </div>
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </body>

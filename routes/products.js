@@ -51,17 +51,7 @@ router.get('/',checkUserLoggedIn, async(req, res, next)=>{
   
 })
 
-//hiển thị trang sản phẩm
-router.get('/:categoryId',checkUserLoggedIn, async(req, res, next)=>{
-  const db=await connectDb();
-  const productsCollection = db.collection('products');
-  const categoryId = req.params.categoryId; 
 
-  const products = await productsCollection.find({ categoryId: parseInt(categoryId) }).toArray();
-
-  res.render('cate-1',{products })
-
-})
 
 
 router.get('/add',checkUserLoggedIn, function(req, res, next) {
@@ -89,6 +79,18 @@ router.post('/add', upload.single('img'),async(req, res) =>{
   await productsCollection.insertOne(newProduct);
   res.redirect('/products');
 });
+
+//hiển thị trang sản phẩm
+router.get('/:categoryId',checkUserLoggedIn, async(req, res, next)=>{
+  const db=await connectDb();
+  const productsCollection = db.collection('products');
+  const categoryId = req.params.categoryId; 
+
+  const products = await productsCollection.find({ categoryId: parseInt(categoryId) }).toArray();
+
+  res.render('cate-1',{products })
+
+})
 
 router.get('/edit/:id',checkUserLoggedIn, async(req, res, next)=> {
   const db= await connectDb();

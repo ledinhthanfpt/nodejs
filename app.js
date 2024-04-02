@@ -15,7 +15,9 @@ var statisticRouter = require('./routes/statistic');
 var verifyRouter = require('./routes/verify');
 var authMiddlewareRouter = require('./routes/authMiddleware');
 var orderRouter = require('./routes/order');
+var vouchersRouter = require('./routes/vouchers');
 var apiRouter = require('./routes/api/products');
+var apivouchersRouter = require('./routes/api/vouchers');
 var apiusersRouter = require('./routes/api/users');
 var apicategoriesRouter = require('./routes/api/categories');
 
@@ -54,9 +56,11 @@ app.use('/statistic', statisticRouter);
 app.use('/verify', verifyRouter);
 app.use('/authMiddleware', authMiddlewareRouter);
 app.use('/order', orderRouter);
+app.use('/vouchers', vouchersRouter);
 app.use('/api/products', apiRouter);
 app.use('/api/users', apiusersRouter);
 app.use('/api/categories', apicategoriesRouter);
+app.use('/api/vouchers', apivouchersRouter);
 
 // Xử lý lỗi 404
 app.use(function(req, res, next) {

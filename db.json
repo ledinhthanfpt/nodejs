@@ -1,4 +1,8 @@
 {
-    "ProductID": 101,
-    "SupplierID": 1
-}
+    "id": "1",
+    "name": "Giảm giá 10% cho sản phẩm A",
+    "type": "percent_discount",
+    "value": 10,
+    "condition": "Áp dụng cho sản phẩm A",
+    "expiration_date": "2024-12-31"
+  }
