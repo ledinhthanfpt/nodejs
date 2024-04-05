@@ -69,7 +69,6 @@ router.get('/check-login-status', (req, res) => {
   // Lấy token từ cookie
   const token = req.cookies.auth_token;
 
-
   // Kiểm tra token
   if (!token) {
     return res.status(200).json({

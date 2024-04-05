@@ -14,7 +14,7 @@ cb(null, file.originalname)
 //Kiểm tra file upload 
 function checkFileUpLoad(req, file, cb){ 
 if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)){ 
-return cb(new Error('Bạn chỉ được upload file ảnh')); 
+return cb(new Error('Bạn chỉ được upload file ảnh'));
 } 
 cb(null, true); 
 } 
@@ -22,8 +22,6 @@ cb(null, true);
 let upload = multer({ storage: storage, fileFilter: checkFileUpLoad }); 
 //Imort model 
 const connectDb=require('../../models/db');
-
-
 
 //Trả về danh sách sản phẩm
 
