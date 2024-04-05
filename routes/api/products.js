@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router(); 
 const multer = require('multer'); 
 //Thiết lập nơi lưu trữ và tên file 
+const checkUserPermission = require('../authMiddleware');
+
 
 let storage = multer.diskStorage({ 
 destination: function (req, file, cb) { 
@@ -98,7 +100,7 @@ router.put('/products/:id',upload.single('img'),async(req,res,next)=>{
     }
 });
 
-router.get('/hot', async (req, res, next) => {
+router.get('/hot',checkUserPermission, async (req, res, next) => {
     const db = await connectDb();
     const productsCollection = db.collection('products');
     const product=await productsCollection.find({hot:1}).toArray();

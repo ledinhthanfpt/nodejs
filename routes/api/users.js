@@ -222,24 +222,24 @@ router.post('/login', async (req, res) => {
       
       console.log(token);
       
-      // Kiểm tra trạng thái xác minh và vai trò của người dùng để chuyển hướng
-      if (user.key === 'off') {
-        res.status(401).send('Vui lòng sác minh tài khoản bằng đường dẫn trong gmail');
-      } else if (user.key === 'xx') {
-        res.status(401).send('Tài khoản quản trị bị khóa liên hệ mail:"quanlyhosothucung@gmail.com" để biết thêm ');
-      } else if (user.role === 'admin') {
-        return res.redirect('/products');
-      } else if (user.role === 'user') {
-        return res.redirect('http://127.0.0.1:5500/index.html');
-      }
-    } else {
-      res.status(401).send('Tên đăng nhập hoặc mật khẩu không đúng');
-    }
-  } catch (error) {
-    console.error('Đã có lỗi xảy ra', error);
-    res.status(500).send('Lỗi server');
-  }
-});
+            // Thay vì chuyển hướng, gửi thông tin người dùng về cho client
+            res.status(200).json({
+              message: 'Đăng nhập thành công',
+              user: {
+                id: user._id,
+                fullname: `${user.firstname} ${user.lastname}`,
+                email: user.email,
+                role: user.role,
+              }
+            });
+          } else {
+            res.status(401).send('Tên đăng nhập hoặc mật khẩu không đúng');
+          }
+        } catch (error) {
+          console.error('Đã có lỗi xảy ra', error);
+          res.status(500).send('Lỗi server');
+        }
+      });
 
 
 
