@@ -3,6 +3,7 @@ var router = express.Router();
 const multer = require('multer'); 
 //Thiết lập nơi lưu trữ và tên file 
 const checkUserPermission = require('../authMiddleware');
+const checkAdminPermission = require('../authMiddleware-admin');
 
 
 let storage = multer.diskStorage({ 

@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 // Middleware để kiểm tra token và role người dùng
-const checkUserPermission = (req, res, next) => {
+const checkAdminPermission = (req, res, next) => {
   // Lấy token từ cookie
   const token = req.cookies.auth_token;
   if (!token) {
@@ -12,12 +12,10 @@ const checkUserPermission = (req, res, next) => {
   try {
     // Xác thực token
     const decoded = jwt.verify(token, process.env.KEY_CRYPTO);
-    req.user = decoded;
+    req.admin = decoded;
 
-    const allowedRoles = ['user', 'admin'];
-
-    // Kiểm tra nếu role là 'user'
-    if (allowedRoles.includes(decoded.role)) {
+    // Kiểm tra nếu role là 'admin'
+    if (decoded.role === 'admin') {
       
       next();
     } else {
@@ -30,4 +28,4 @@ const checkUserPermission = (req, res, next) => {
 };
 
 
-module.exports = checkUserPermission;
+module.exports = checkAdminPermission;
