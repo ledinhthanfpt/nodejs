@@ -101,7 +101,7 @@ router.put('/products/:id',upload.single('img'),async(req,res,next)=>{
     }
 });
 
-router.get('/hot',checkUserPermission, async (req, res, next) => {
+router.get('/hot', async (req, res, next) => {
     const db = await connectDb();
     const productsCollection = db.collection('products');
     const product=await productsCollection.find({hot:1}).toArray();
